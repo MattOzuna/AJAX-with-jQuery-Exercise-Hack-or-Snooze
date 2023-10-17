@@ -74,7 +74,14 @@ class StoryList {
    */
 
   async addStory( /* user, newStory */) {
-    // UNIMPLEMENTED: complete this function!
+    await axios.post({
+      url: `${BASE_URL}/stories`,
+      method: "POST",
+      params: { 
+        token: User.token,
+        story: this.story
+       },
+    });
   }
 }
 
