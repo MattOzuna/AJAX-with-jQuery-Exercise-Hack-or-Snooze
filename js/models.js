@@ -24,8 +24,8 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    const ending = this.url.indexOf('.com')
+    return this.url.slice(7, (ending+4));
   }
 }
 
@@ -74,14 +74,20 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
-    await axios.post(`${BASE_URL}/stories`,
+    try {
+    const response = await axios.post(`${BASE_URL}/stories`,
       { token: user.loginToken,
         story: newStory
        }
       );
-    const story = new Story(newStory);
+    const story = new Story(response.data.story);
     this.stories.push(story);
     return story
+  } 
+    catch{
+      console.error("addStory Failed", err);
+      return null;
+  }
   }
 }
 
@@ -200,4 +206,15 @@ class User {
       return null;
     }
   }
+
+  /**Adding favorite  */
+
+  async addFavoriteToAPI(storyId){
+    return await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: "POST",
+      params: {token: this.loginToken}
+    });
+  }
+
 }
