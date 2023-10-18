@@ -50,3 +50,29 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/**Posts the new story submition to the server, generats and appends it to the HTML*/
+
+async function submitNewStory(evt) {
+  console.debug("submitNewStory", evt);
+  evt.preventDefault();
+
+  //makes obj for new story form info
+  const newStory = {
+    title: $('#story-title').val(),
+    author: $('#story-author').val(),
+    url: $('#story-url').val()
+  }
+
+  await storyList.addStory(currentUser, newStory)
+
+  //adds new story to HTMl
+  const $story = generateStoryMarkup(storyList.stories[(storyList.stories.length - 1)]);
+  $allStoriesList.append($story);
+
+  $newStoryForm.trigger('reset')
+  $newStoryForm.hide();
+  updateUIOnUserLogin();
+}
+
+$newStoryForm.on('submit', submitNewStory)
