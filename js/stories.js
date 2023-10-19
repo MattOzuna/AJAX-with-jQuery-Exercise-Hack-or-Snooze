@@ -43,6 +43,7 @@ function putStoriesOnPage() {
 
   $allStoriesList.empty();
   $userStoriesList.empty()
+  $favoritedStoriesList.empty();
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
@@ -64,6 +65,7 @@ function putMyStoriesOnPage() {
 
   $userStoriesList.empty();
   $allStoriesList.empty();
+  $favoritedStoriesList.empty();
 
 
   // loop through all of our stories and generate HTML for them
@@ -81,6 +83,30 @@ function putMyStoriesOnPage() {
   $('.story-remove').on('click', removeStory)
 
   $userStoriesList.show();
+}
+/** Gets list of favorites stories from cuurent user, generates their HTML, and puts on page
+ * with a remove button.
+ */
+
+function putFavoriteStoriesOnPage() {
+  console.debug("putFavoriteStoriesOnPage");
+
+  $userStoriesList.empty();
+  $allStoriesList.empty();
+  $favoritedStoriesList.empty();
+
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of currentUser.favorites) {
+    const $story = generateStoryMarkup(story);
+    
+    $favoritedStoriesList.append($story);
+    
+    //adding to check for favorite
+    currentUser.checkFavorites(story.storyId)
+  }
+
+  $favoritedStoriesList.show();
 }
 
 /**Posts the new story submition to the server, generats and appends it to the HTML*/
