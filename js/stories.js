@@ -50,7 +50,7 @@ function putStoriesOnPage() {
     $allStoriesList.append($story);
 
     //adding to check for favorite
-    console.log(story.storyId)
+    console.log($(`#${story.storyId}`))
     currentUser.checkFavorites(story.storyId)
   }
 
