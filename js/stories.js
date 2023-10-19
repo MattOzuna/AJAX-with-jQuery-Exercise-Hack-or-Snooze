@@ -21,16 +21,18 @@ async function getAndShowStoriesOnStart() {
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
-
+  
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        <input class="story-favorite" type="checkbox">
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
+        
       </li>
     `);
 }
@@ -46,6 +48,10 @@ function putStoriesOnPage() {
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
+
+    //adding to check for favorite
+    console.log(story.storyId)
+    currentUser.checkFavorites(story.storyId)
   }
 
   $allStoriesList.show();

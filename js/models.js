@@ -209,12 +209,37 @@ class User {
 
   /**Adding favorite  */
 
-  async addFavoriteToAPI(storyId){
-    return await axios({
+  async addFavorite(storyId){
+    try{
+    const response = await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
       method: "POST",
       params: {token: this.loginToken}
     });
+  } catch (err) {
+    console.error('addFavorite failed', err);
+    return null;
+  }
   }
 
+  async removeFavorite(storyId){
+    try{
+      const response = await axios({
+        url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+        method: "DELETE",
+        params: {token: this.loginToken}
+      });
+  } catch (err) {
+    console.error('removeFavorite failed', err);
+    return null;
+  }
+}
+
+  checkFavorites(storyID) {
+    for(let favorite of this.favorites){
+      // console.log(favorite)
+      if (favorite.storyId === storyID)
+        $('.story-favorite').attr('checked', true)
+    }
+  }
 }

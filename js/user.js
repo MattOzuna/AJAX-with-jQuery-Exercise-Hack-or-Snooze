@@ -114,3 +114,15 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+
+async function favoriteClickHandler(evt){
+  const storyId = evt.target.parentElement.id
+  if (evt.target.checked){
+    currentUser.addFavorite(storyId);
+  } else {
+    currentUser.removeFavorite(storyId);
+  }
+}
+
+$allStoriesList.on('change', favoriteClickHandler)
