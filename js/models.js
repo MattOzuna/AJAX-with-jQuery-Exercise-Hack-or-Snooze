@@ -89,7 +89,24 @@ class StoryList {
       return null;
   }
   }
+
+  /**Removed story data from the API, removes from storylist, and removes from th DOM */
+  async removeStory(user, storyId){
+    try{
+      return await axios({
+        url: `${BASE_URL}/stories/${storyId}`,
+        method: "DELETE",
+        params: {token: user.loginToken}
+      });
+
+    } catch (err){
+      console.error("removeStory failed", err);
+      return null;
+  }
+  }
 }
+
+
 
 
 /******************************************************************************
@@ -207,7 +224,7 @@ class User {
     }
   }
 
-  /**Adding favorite  */
+  /**Adding favorite to API  */
 
   async addFavorite(storyId){
     try{
@@ -216,12 +233,16 @@ class User {
       method: "POST",
       params: {token: this.loginToken}
     });
+    //updates the favorites so the checkboxs remained checked when switching between forms and lists
+    //in the nav
+    this.favorites = response.data.user.favorites;
   } catch (err) {
     console.error('addFavorite failed', err);
     return null;
   }
   }
 
+  /**Removing favorit from API */
   async removeFavorite(storyId){
     try{
       const response = await axios({
@@ -229,13 +250,19 @@ class User {
         method: "DELETE",
         params: {token: this.loginToken}
       });
+    //updates the favorites so the checkboxs remained checked when switching between forms and lists
+    //in the nav
+      this.favorites = response.data.user.favorites;
   } catch (err) {
     console.error('removeFavorite failed', err);
     return null;
   }
 }
 
-  checkFavorites(storyID) {
+/**When the story list is added to the DOM checks the story ID on the Story list against the favorites list
+ * checks the story that are on the favorited list.
+ */
+checkFavorites(storyID) {
     for(let favorite of this.favorites){
       if (favorite.storyId === storyID)
         $(`#${favorite.storyId} input`).attr('checked', true)

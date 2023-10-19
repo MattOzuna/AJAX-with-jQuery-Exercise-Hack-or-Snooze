@@ -109,13 +109,13 @@ function saveUserCredentialsInLocalStorage() {
 
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
-
+  hidePageComponents()
   $allStoriesList.show();
 
   updateNavOnLogin();
 }
 
-
+/**added handler for the checkbox to add or remove from API */
 async function favoriteClickHandler(evt){
   const storyId = evt.target.parentElement.id
   if (evt.target.checked){

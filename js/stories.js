@@ -32,7 +32,6 @@ function generateStoryMarkup(story) {
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
-        
       </li>
     `);
 }
@@ -43,6 +42,7 @@ function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
 
   $allStoriesList.empty();
+  $userStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
@@ -50,11 +50,37 @@ function putStoriesOnPage() {
     $allStoriesList.append($story);
 
     //adding to check for favorite
-    console.log($(`#${story.storyId}`))
     currentUser.checkFavorites(story.storyId)
   }
 
   $allStoriesList.show();
+}
+/** Gets list of my stories from cuurent user, generates their HTML, and puts on page
+ * with a remove button.
+ */
+
+function putMyStoriesOnPage() {
+  console.debug("putMyStoriesOnPage");
+
+  $userStoriesList.empty();
+  $allStoriesList.empty();
+
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of currentUser.ownStories) {
+    const $story = generateStoryMarkup(story);
+    $('<button class="story-remove">Delete</button>').appendTo($story);
+    
+    $userStoriesList.append($story);
+    
+    //adding to check for favorite
+    currentUser.checkFavorites(story.storyId)
+  }
+  
+  //add event listener for buttons
+  $('.story-remove').on('click', removeStory)
+
+  $userStoriesList.show();
 }
 
 /**Posts the new story submition to the server, generats and appends it to the HTML*/
@@ -70,9 +96,10 @@ async function submitNewStory(evt) {
     url: $('#story-url').val()
   }
 
-  await storyList.addStory(currentUser, newStory)
+  const response = await storyList.addStory(currentUser, newStory)
 
   //adds new story to HTMl
+  currentUser.ownStories.push(response)
   const $story = generateStoryMarkup(storyList.stories[(storyList.stories.length - 1)]);
   $allStoriesList.append($story);
 
@@ -82,3 +109,14 @@ async function submitNewStory(evt) {
 }
 
 $newStoryForm.on('submit', submitNewStory)
+
+/** Event listener and callback for deleting your own stories */
+
+async function removeStory(evt) {
+  console.debug("removeStory", evt);
+  evt.target.parentElement.remove()
+  return await storyList.removeStory(currentUser, evt.target.parentElement.id)
+
+
+}
+
