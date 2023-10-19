@@ -38,6 +38,33 @@ function hidePageComponents() {
   ];
   components.forEach(c => c.hide());
 }
+//added function to hide all nav componenets
+function hideNavComponents(){
+  const components = [
+    $navFavorites,
+    $navLogOut,
+    $navLogin,
+    $navSubmit,
+    $navUserProfile,
+    $navMyStories,
+    $('.nav-break')
+  ]
+  components.forEach(c => c.hide());
+}
+
+//added function to remove all nav components
+function showNavComponents(){
+  const components = [
+    $navFavorites,
+    $navLogOut,
+    $navLogin,
+    $navSubmit,
+    $navUserProfile,
+    $navMyStories,
+    $('.nav-break')
+  ]
+  components.forEach(c => c.show());
+}
 
 /** Overall function to kick off the app. */
 

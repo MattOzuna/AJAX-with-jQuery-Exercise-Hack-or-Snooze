@@ -110,8 +110,11 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
   hidePageComponents()
-  $allStoriesList.show();
-
+  $allStoriesList.empty();
+  
+  //add this so that favorites would populate when user logged in
+  //there might be a better way to do this
+  putStoriesOnPage();
   updateNavOnLogin();
 }
 
@@ -126,3 +129,5 @@ async function favoriteClickHandler(evt){
 }
 
 $allStoriesList.on('change', favoriteClickHandler)
+$userStoriesList.on('change', favoriteClickHandler)
+$favoritedStoriesList.on('change', favoriteClickHandler)

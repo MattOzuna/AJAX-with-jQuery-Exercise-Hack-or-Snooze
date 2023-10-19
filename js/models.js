@@ -84,7 +84,7 @@ class StoryList {
     this.stories.push(story);
     return story
   } 
-    catch{
+    catch (err){
       console.error("addStory Failed", err);
       return null;
   }

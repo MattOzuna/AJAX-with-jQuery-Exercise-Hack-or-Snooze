@@ -9,6 +9,8 @@
 function navAllStories(evt) {
   console.debug("navAllStories", evt);
   hidePageComponents();
+  showNavComponents();
+  $navLogOut.hide()
   putStoriesOnPage();
 }
 
@@ -19,6 +21,7 @@ $body.on("click", "#nav-all", navAllStories);
 function navLoginClick(evt) {
   console.debug("navLoginClick", evt);
   hidePageComponents();
+  hideNavComponents();
   $loginForm.show();
   $signupForm.show();
 }
@@ -30,6 +33,7 @@ $navLogin.on("click", navLoginClick);
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
   $(".main-nav-links").show();
+  showNavComponents();
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();

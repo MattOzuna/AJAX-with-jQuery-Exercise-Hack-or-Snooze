@@ -33,6 +33,7 @@ function generateStoryMarkup(story) {
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>
+      
     `);
 }
 
@@ -49,8 +50,10 @@ function putStoriesOnPage() {
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story);
     $allStoriesList.append($story);
+    $('<hr class="story-break">').appendTo($story)
 
-    //adding to check for favorite
+    //adding to check for favorite if there is a user signed in
+    if (currentUser !== undefined)
     currentUser.checkFavorites(story.storyId)
   }
 
@@ -61,6 +64,8 @@ function putStoriesOnPage() {
  */
 
 function putMyStoriesOnPage() {
+  //only works if a user is signed in
+  if (currentUser !== undefined){
   console.debug("putMyStoriesOnPage");
 
   $userStoriesList.empty();
@@ -74,7 +79,7 @@ function putMyStoriesOnPage() {
     $('<button class="story-remove">Delete</button>').appendTo($story);
     
     $userStoriesList.append($story);
-    
+    $('<hr class="story-break">').appendTo($story)
     //adding to check for favorite
     currentUser.checkFavorites(story.storyId)
   }
@@ -83,12 +88,17 @@ function putMyStoriesOnPage() {
   $('.story-remove').on('click', removeStory)
 
   $userStoriesList.show();
+  return
 }
-/** Gets list of favorites stories from cuurent user, generates their HTML, and puts on page
+return console.log('No user signed in!')
+}
+/** Gets list of favorites stories from current user, generates their HTML, and puts on page
  * with a remove button.
  */
 
 function putFavoriteStoriesOnPage() {
+  //only works if a user is signed in
+  if (currentUser !== undefined){
   console.debug("putFavoriteStoriesOnPage");
 
   $userStoriesList.empty();
@@ -97,16 +107,22 @@ function putFavoriteStoriesOnPage() {
 
 
   // loop through all of our stories and generate HTML for them
-  for (let story of currentUser.favorites) {
+  for (let favorite of currentUser.favorites) {
+    //made each favorite into a instance of th story class,
+    //so the story.hostname method could be called
+    const story = new Story(favorite)
     const $story = generateStoryMarkup(story);
     
     $favoritedStoriesList.append($story);
-    
+    $('<hr class="story-break">').appendTo($story)
     //adding to check for favorite
     currentUser.checkFavorites(story.storyId)
   }
 
   $favoritedStoriesList.show();
+  return
+}
+return console.log('No user signed in!')
 }
 
 /**Posts the new story submition to the server, generats and appends it to the HTML*/
