@@ -265,7 +265,8 @@ class User {
 checkFavorites(storyID) {
     for(let favorite of this.favorites){
       if (favorite.storyId === storyID)
-        $(`#${favorite.storyId} input`).attr('checked', true)
+        $(`#${favorite.storyId} i`).removeClass('far');
+        $(`#${favorite.storyId} i`).addClass('fas');
     }
   }
 }

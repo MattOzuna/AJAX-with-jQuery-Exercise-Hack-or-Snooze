@@ -120,14 +120,25 @@ function updateUIOnUserLogin() {
 
 /**added handler for the checkbox to add or remove from API */
 async function favoriteClickHandler(evt){
+  try{
   const storyId = evt.target.parentElement.id
-  if (evt.target.checked){
+  if (evt.target.classList.contains('far')){
     currentUser.addFavorite(storyId);
+    //swap empty star with filled star
+    evt.target.classList.remove('far');
+    evt.target.classList.add('fas');
   } else {
     currentUser.removeFavorite(storyId);
+    //swap filled star with empty star
+    evt.target.classList.remove('fas');
+    evt.target.classList.add('far')
+  }}
+  catch (err){
+    console.error('favoriteClickError:', err);
+    return null;
   }
 }
 
-$allStoriesList.on('change', favoriteClickHandler)
-$userStoriesList.on('change', favoriteClickHandler)
-$favoritedStoriesList.on('change', favoriteClickHandler)
+$allStoriesList.on('click', 'i', favoriteClickHandler)
+$userStoriesList.on('click', 'i', favoriteClickHandler)
+$favoritedStoriesList.on('click', 'i', favoriteClickHandler)
